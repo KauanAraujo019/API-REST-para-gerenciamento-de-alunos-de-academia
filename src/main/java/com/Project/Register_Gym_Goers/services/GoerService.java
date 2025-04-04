@@ -7,6 +7,7 @@ import com.Project.Register_Gym_Goers.entities.enums.StatusPayment;
 import com.Project.Register_Gym_Goers.repositories.GoerRepository;
 import com.Project.Register_Gym_Goers.repositories.InvoiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -37,7 +38,11 @@ public class GoerService {
 
         int lastInvoice = goerRepository.findById(id).get().getInvoices().size()-1;
 
-        if (goerRepository.getReferenceById(id).getInvoices().get(lastInvoice).g)
+
+        if (LocalDate.now().getMonthValue() < goerRepository.getReferenceById(id).getInvoices().get(lastInvoice).getDueDay().getMonthValue()-1 && LocalDate.now().getYear() == goerRepository.getReferenceById(id).getInvoices().get(lastInvoice).getDueDay().getYear()
+                || LocalDate.now().getMonthValue() > goerRepository.getReferenceById(id).getInvoices().get(lastInvoice).getDueDay().getMonthValue() && LocalDate.now().getYear() < goerRepository.getReferenceById(id).getInvoices().get(lastInvoice).getDueDay().getYear()){
+            return;
+        }
 
 
         if (goerRepository.getReferenceById(id).getInvoices().get(lastInvoice).getStatusPayment().equals(StatusPayment.IN_PROGRESS)){
@@ -56,9 +61,6 @@ public class GoerService {
 
             if (LocalDate.now().getDayOfYear() > goerRepository.getReferenceById(id).getInvoices().get(lastInvoice).getDueDay().getDayOfYear()){
 
-                int a = LocalDate.now().getDayOfYear();
-                int b = goerRepository.getReferenceById(id).getInvoices().get(lastInvoice).getDueDay().getDayOfYear();
-
                 goerRepository.getReferenceById(id).getInvoices().get(lastInvoice).setStatusPayment(StatusPayment.OVERDUE);
 
                 invoiceRepository.save(goerRepository.getReferenceById(id).getInvoices().get(lastInvoice));
@@ -69,7 +71,7 @@ public class GoerService {
         }
         else if (goerRepository.getReferenceById(id).getInvoices().get(lastInvoice).getStatusPayment().equals(StatusPayment.PAID)){
 
-            Invoice invoice = new Invoice(null, StatusPayment.IN_PROGRESS, goerRepository.getReferenceById(id).getPlanCategory(), goerRepository.getReferenceById(id).getInvoices().get(lastInvoice).getReferenceMonth().plus(1));
+            Invoice invoice = new Invoice(null, StatusPayment.IN_PROGRESS, goerRepository.getReferenceById(id).getPlanCategory(), goerRepository.getReferenceById(id).getInvoices().get(lastInvoice).getReferenceMonth().plus(PlanCategory.defDueDay(goerRepository.getReferenceById(id).getPlanCategory())));
 
             goerRepository.getReferenceById(id).getInvoices().add(invoice);
 
