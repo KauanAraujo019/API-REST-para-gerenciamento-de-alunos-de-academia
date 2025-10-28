@@ -3,13 +3,15 @@ package com.Project.Register_Gym_Goers.entities;
 import com.Project.Register_Gym_Goers.entities.enums.PlanCategory;
 import com.Project.Register_Gym_Goers.entities.enums.StatusPayment;
 import jakarta.persistence.*;
+import org.apache.catalina.User;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
 
 @Entity
 @Table(name = "invoices")
-public class Invoice {
+public class Invoice implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,7 +22,11 @@ public class Invoice {
     private LocalDate referenceMonth;
     private LocalDate dueMonth;
 
-
+    @ManyToOne
+    @JoinTable(name = "tb_Orders_Goers",
+            joinColumns = @JoinColumn(name = "tb_goer"),
+            inverseJoinColumns = @JoinColumn(name = "tb_invoices"))
+    private Goer goer;
 
 
     public Invoice(){
@@ -77,7 +83,13 @@ public class Invoice {
         this.dueMonth = dueMonth;
     }
 
+    public Goer getGoer() {
+        return goer;
+    }
 
+    public void setGoer(Goer goer) {
+        this.goer = goer;
+    }
 
 
 
@@ -92,4 +104,5 @@ public class Invoice {
     public int hashCode() {
         return Objects.hashCode(id);
     }
+
 }

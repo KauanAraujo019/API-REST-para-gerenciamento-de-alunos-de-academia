@@ -30,7 +30,13 @@ public class testConfig implements CommandLineRunner {
 
         Invoice invoice1 = new Invoice(null, StatusPayment.PAID, PlanCategory.MONTHLY, LocalDate.now(), LocalDate.now().plusMonths(1));
 
+        goer.getInvoices().add(invoice1);
+        invoice1.setGoer(goer);
+
         invoiceRepository.save(invoice1);
+
+
+
 
 
 

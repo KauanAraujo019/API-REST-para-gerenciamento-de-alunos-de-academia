@@ -24,7 +24,8 @@ public class Goer implements Serializable {
     private Instant dateRegister;
 
 
-
+    @OneToMany(mappedBy = "goer")
+    private List<Invoice> invoices = new ArrayList<>();
 
 
     public Goer(){
@@ -97,6 +98,14 @@ public class Goer implements Serializable {
         this.dateRegister = dateRegister;
     }
 
+    public List<Invoice> getInvoices() {
+        return invoices;
+    }
+
+    public void setInvoices(List<Invoice> invoices) {
+        this.invoices = invoices;
+    }
+
 
 
     @Override
@@ -110,4 +119,5 @@ public class Goer implements Serializable {
     public int hashCode() {
         return Objects.hashCode(id);
     }
+
 }
