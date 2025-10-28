@@ -1,7 +1,6 @@
 package com.Project.Register_Gym_Goers.entities;
 
 import jakarta.persistence.*;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.time.Instant;
 import java.util.Objects;
@@ -21,7 +20,7 @@ public class Goer {
     private String address;
     private Instant dateRegister;
 
-    
+
 
 
 
