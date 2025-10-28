@@ -2,6 +2,7 @@ package com.Project.Register_Gym_Goers.entities;
 
 import com.Project.Register_Gym_Goers.entities.enums.PlanCategory;
 import com.Project.Register_Gym_Goers.entities.enums.StatusPayment;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.apache.catalina.User;
 
@@ -22,6 +23,7 @@ public class Invoice implements Serializable {
     private LocalDate referenceMonth;
     private LocalDate dueMonth;
 
+    @JsonIgnore
     @ManyToOne
     @JoinTable(name = "tb_Orders_Goers",
             joinColumns = @JoinColumn(name = "tb_goer"),
