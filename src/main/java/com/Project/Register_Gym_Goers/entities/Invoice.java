@@ -15,8 +15,8 @@ public class Invoice {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private StatusPayment statusPayment;
-    private PlanCategory planCategory;
+    private Integer statusPayment;
+    private Integer planCategory;
     private LocalDate referenceMonth;
     private LocalDate dueMonth;
 
@@ -29,8 +29,8 @@ public class Invoice {
 
     public Invoice(Long id, StatusPayment statusPayment, PlanCategory planCategory, LocalDate referenceMonth, LocalDate dueMonth) {
         this.id = id;
-        this.statusPayment = statusPayment;
-        this.planCategory = planCategory;
+        setStatusPayment(statusPayment);
+        setPlanCategory(planCategory);
         this.referenceMonth = referenceMonth;
         this.dueMonth = dueMonth;
 
@@ -46,19 +46,19 @@ public class Invoice {
     }
 
     public StatusPayment getStatusPayment() {
-        return statusPayment;
+        return StatusPayment.findById(statusPayment);
     }
 
     public void setStatusPayment(StatusPayment statusPayment) {
-        this.statusPayment = statusPayment;
+        this.statusPayment = statusPayment.getCode();
     }
 
     public PlanCategory getPlanCategory() {
-        return planCategory;
+        return PlanCategory.findById(planCategory);
     }
 
     public void setPlanCategory(PlanCategory planCategory) {
-        this.planCategory = planCategory;
+        this.planCategory = planCategory.getCode();
     }
 
     public LocalDate getReferenceMonth() {

@@ -1,12 +1,14 @@
 package com.Project.Register_Gym_Goers.entities.enums;
 
+import java.util.Objects;
+
 public enum StatusPayment {
 
     WAITING_PAYMENT(1),
     PAID(2),
     OVERDUE(3);
 
-    private Integer code;
+    private final Integer code;
 
     StatusPayment(Integer code){
         this.code = code;
@@ -17,9 +19,9 @@ public enum StatusPayment {
     }
 
 
-    public StatusPayment findById(Integer id){
+    public static StatusPayment findById(Integer id){
         for (StatusPayment value : StatusPayment.values()){
-            if (value.getCode() == id){
+            if (Objects.equals(value.getCode(), id)){
                 return value;
             }
 
