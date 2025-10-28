@@ -24,7 +24,6 @@ public class Goer implements Serializable {
     private Instant dateRegister;
 
 
-    private List<Invoice> invoices = new ArrayList<>();
 
 
 
@@ -98,13 +97,7 @@ public class Goer implements Serializable {
         this.dateRegister = dateRegister;
     }
 
-    public List<Invoice> getInvoices() {
-        return invoices;
-    }
 
-    public void setInvoices(List<Invoice> invoices) {
-        this.invoices = invoices;
-    }
 
     @Override
     public boolean equals(Object o) {

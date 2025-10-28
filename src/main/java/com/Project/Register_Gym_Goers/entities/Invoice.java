@@ -20,20 +20,20 @@ public class Invoice {
     private LocalDate referenceMonth;
     private LocalDate dueMonth;
 
-    private Goer goer;
+
 
 
     public Invoice(){
 
     }
 
-    public Invoice(Long id, StatusPayment statusPayment, PlanCategory planCategory, LocalDate referenceMonth, LocalDate dueMonth, Goer goer) {
+    public Invoice(Long id, StatusPayment statusPayment, PlanCategory planCategory, LocalDate referenceMonth, LocalDate dueMonth) {
         this.id = id;
         this.statusPayment = statusPayment;
         this.planCategory = planCategory;
         this.referenceMonth = referenceMonth;
         this.dueMonth = dueMonth;
-        this.goer = goer;
+
     }
 
 
@@ -77,13 +77,7 @@ public class Invoice {
         this.dueMonth = dueMonth;
     }
 
-    public Goer getGoer() {
-        return goer;
-    }
 
-    public void setGoer(Goer goer) {
-        this.goer = goer;
-    }
 
 
 

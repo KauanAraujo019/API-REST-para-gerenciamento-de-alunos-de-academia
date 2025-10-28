@@ -1,9 +1,9 @@
 package com.Project.Register_Gym_Goers.controllers;
 
-import jakarta.persistence.Entity;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@Entity
+@RestController
 @RequestMapping(value = "/invoices")
 public class InvoiceController {
 
