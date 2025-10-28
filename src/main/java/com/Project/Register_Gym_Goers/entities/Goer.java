@@ -2,12 +2,13 @@ package com.Project.Register_Gym_Goers.entities;
 
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.time.Instant;
 import java.util.Objects;
 
 @Entity
 @Table(name = "goers")
-public class Goer {
+public class Goer implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
