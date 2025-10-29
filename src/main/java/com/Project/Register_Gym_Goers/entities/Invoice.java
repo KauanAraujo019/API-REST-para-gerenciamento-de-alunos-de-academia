@@ -4,7 +4,8 @@ import com.Project.Register_Gym_Goers.entities.enums.PlanCategory;
 import com.Project.Register_Gym_Goers.entities.enums.StatusPayment;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import org.apache.catalina.User;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -12,6 +13,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "invoices")
+@EnableScheduling
 public class Invoice implements Serializable {
 
     @Id
@@ -22,6 +24,7 @@ public class Invoice implements Serializable {
     private Integer planCategory;
     private LocalDate referenceMonth;
     private LocalDate dueMonth;
+
 
     @JsonIgnore
     @ManyToOne
@@ -41,6 +44,14 @@ public class Invoice implements Serializable {
         setPlanCategory(planCategory);
         this.referenceMonth = referenceMonth;
         this.dueMonth = dueMonth;
+
+    }
+
+
+    @Scheduled(cron = "0 0 0 30 * *")
+    private void createInvoice(){
+
+
 
     }
 
