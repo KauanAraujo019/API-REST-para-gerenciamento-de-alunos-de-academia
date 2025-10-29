@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 @Configuration
 public class testConfig implements CommandLineRunner {
@@ -24,7 +25,7 @@ public class testConfig implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        Goer goer = new Goer(null, "jose", 38, "12211221", "09999999", "rua generica Qd01", Instant.now());
+        Goer goer = new Goer(null, "jose", LocalDate.parse("16/10/1981", DateTimeFormatter.ofPattern("dd/MM/yyyy")), "12211221", "09999999", "rua generica Qd01", LocalDate.now());
 
         goerRepository.save(goer);
 

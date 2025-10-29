@@ -3,7 +3,7 @@ package com.Project.Register_Gym_Goers.entities;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
-import java.time.Instant;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -17,11 +17,13 @@ public class Goer implements Serializable {
     private Long id;
 
     private String name;
+    private LocalDate birthDate;
     private Integer age;
     private String cpf;
     private String phone;
     private String address;
-    private Instant dateRegister;
+
+    private LocalDate dateRegister = LocalDate.now();
 
 
     @OneToMany(mappedBy = "goer")
@@ -32,14 +34,17 @@ public class Goer implements Serializable {
 
     }
 
-    public Goer(Long id, String name, Integer age, String cpf, String phone, String address, Instant dateRegister) {
+    public Goer(Long id, String name, LocalDate birthDate, String cpf, String phone, String address, LocalDate dateRegister) {
         this.id = id;
         this.name = name;
-        this.age = age;
+        this.birthDate = birthDate;
         this.cpf = cpf;
         this.phone = phone;
         this.address = address;
         this.dateRegister = dateRegister;
+
+        age = LocalDate.now().getYear() - birthDate.getYear();
+
     }
 
     public Long getId() {
@@ -58,12 +63,12 @@ public class Goer implements Serializable {
         this.name = name;
     }
 
-    public Integer getAge() {
-        return age;
+    public LocalDate getBirthDate() {
+        return birthDate;
     }
 
-    public void setAge(Integer age) {
-        this.age = age;
+    public void setBirthDate(LocalDate birthDate) {
+        this.birthDate = birthDate;
     }
 
     public String getCpf() {
@@ -90,11 +95,11 @@ public class Goer implements Serializable {
         this.address = address;
     }
 
-    public Instant getDateRegister() {
+    public LocalDate getDateRegister() {
         return dateRegister;
     }
 
-    public void setDateRegister(Instant dateRegister) {
+    public void setDateRegister(LocalDate dateRegister) {
         this.dateRegister = dateRegister;
     }
 
@@ -120,4 +125,11 @@ public class Goer implements Serializable {
         return Objects.hashCode(id);
     }
 
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
+    }
 }

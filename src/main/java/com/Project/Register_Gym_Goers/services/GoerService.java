@@ -26,11 +26,34 @@ public class GoerService {
     // em breve finalizado
     public Goer findByCpf(String cpf){
 
-
-
         return null;
 
     }
 
+    public Goer insert(Goer goer){
+
+        return goerRepository.save(goer);
+
+    }
+
+
+    /*
+    public Goer update(Long id, Goer goer){
+        Goer obj = new Goer();
+
+        UpdateToGoer(obj, goer);
+
+
+
+    }
+
+    private void UpdateToGoer(Goer obj, Goer goer) {
+
+
+
+    }
+
+
+     */
 
 }
