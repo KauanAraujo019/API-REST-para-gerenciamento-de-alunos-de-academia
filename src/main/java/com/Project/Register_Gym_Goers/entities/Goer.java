@@ -1,6 +1,9 @@
 package com.Project.Register_Gym_Goers.entities;
 
 import jakarta.persistence.*;
+import org.apache.tomcat.util.bcel.Const;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -10,6 +13,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "goers")
+@EnableScheduling
 public class Goer implements Serializable {
 
     @Id
@@ -46,6 +50,7 @@ public class Goer implements Serializable {
         age = LocalDate.now().getYear() - birthDate.getYear();
 
     }
+
 
     public Long getId() {
         return id;

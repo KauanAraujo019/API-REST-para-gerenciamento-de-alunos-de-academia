@@ -4,9 +4,10 @@ import java.util.Objects;
 
 public enum StatusPayment {
 
-    WAITING_PAYMENT(1),
-    PAID(2),
-    OVERDUE(3);
+    IN_PROGRESS(1),
+    WAITING_PAYMENT(2),
+    PAID(3),
+    OVERDUE(4);
 
     private final Integer code;
 

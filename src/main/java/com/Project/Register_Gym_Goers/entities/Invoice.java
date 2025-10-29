@@ -13,7 +13,6 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "invoices")
-@EnableScheduling
 public class Invoice implements Serializable {
 
     @Id
@@ -48,12 +47,8 @@ public class Invoice implements Serializable {
     }
 
 
-    @Scheduled(cron = "0 0 0 30 * *")
-    private void createInvoice(){
 
 
-
-    }
 
 
     public Long getId() {
