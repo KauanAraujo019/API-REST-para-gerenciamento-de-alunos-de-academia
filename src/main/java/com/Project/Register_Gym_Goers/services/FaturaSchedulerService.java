@@ -24,17 +24,18 @@ public class FaturaSchedulerService {
     @Autowired
     private InvoiceRepository invoiceRepository;
 
-    public void agendarProximaFatura(Invoice faturaAtual) {
+    public void agendarProximaFatura(Invoice currentInvoice) {
 
 
-        LocalDateTime dataExecucao = LocalDateTime.now().plusSeconds(10);
+        LocalDateTime date = LocalDateTime.now().plusSeconds(10);
 
 
-        Instant instanteExecucao = dataExecucao.atZone(ZoneId.systemDefault()).toInstant();
+        Instant instantExecution = date.atZone(ZoneId.systemDefault()).toInstant();
 
-        scheduler.schedule(() -> gerarProximaFatura(faturaAtual), instanteExecucao);
+        scheduler.schedule(() -> gerarProximaFatura(currentInvoice), instantExecution);
 
-        System.out.println("Fatura futura agendada para: " + dataExecucao);
+        System.out.println("Fatura futura agendada para: " + date);
+
     }
 
     private void gerarProximaFatura(Invoice faturaAnterior) {
@@ -42,8 +43,8 @@ public class FaturaSchedulerService {
         Invoice nova = new Invoice();
         nova.setGoer(faturaAnterior.getGoer());
         nova.setReferenceMonth(faturaAnterior.getReferenceMonth().plusMonths(1));
-        nova.setDueMonth(faturaAnterior.getDueMonth().plusMonths(1));
-        nova.setStatusPayment(StatusPayment.OVERDUE);
+    //    nova.setDueMonth(faturaAnterior.getDueMonth().plusMonths(1));
+        nova.setStatusPayment(StatusPayment.IN_PROGRESS);
         nova.setPlanCategory(faturaAnterior.getPlanCategory());
 
         invoiceRepository.save(nova);

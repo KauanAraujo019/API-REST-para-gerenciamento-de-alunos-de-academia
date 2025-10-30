@@ -22,7 +22,7 @@ public class Invoice implements Serializable {
     private Integer statusPayment;
     private Integer planCategory;
     private LocalDate referenceMonth;
-    private LocalDate dueMonth;
+    private LocalDate dueDay;
 
 
     @JsonIgnore
@@ -37,17 +37,14 @@ public class Invoice implements Serializable {
 
     }
 
-    public Invoice(Long id, StatusPayment statusPayment, PlanCategory planCategory, LocalDate referenceMonth, LocalDate dueMonth) {
+    public Invoice(Long id, StatusPayment statusPayment, PlanCategory planCategory, LocalDate referenceMonth, LocalDate dueDay) {
         this.id = id;
         setStatusPayment(statusPayment);
         setPlanCategory(planCategory);
         this.referenceMonth = referenceMonth;
-        this.dueMonth = dueMonth;
+        this.dueDay = dueDay;
 
     }
-
-
-
 
 
 
@@ -83,12 +80,12 @@ public class Invoice implements Serializable {
         this.referenceMonth = referenceMonth;
     }
 
-    public LocalDate getDueMonth() {
-        return dueMonth;
+    public LocalDate getDueDay() {
+        return dueDay;
     }
 
-    public void setDueMonth(LocalDate dueMonth) {
-        this.dueMonth = dueMonth;
+    public void setDueDay(LocalDate dueDay) {
+        this.dueDay = dueDay;
     }
 
     public Goer getGoer() {
