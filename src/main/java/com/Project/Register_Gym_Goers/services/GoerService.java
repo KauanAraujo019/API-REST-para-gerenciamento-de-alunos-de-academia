@@ -27,16 +27,44 @@ public class GoerService {
         return goerRepository.findAll();
     }
 
+
     public Goer findById(Long id){
 
-        if (LocalDate.now().plusMonths(1).equals(goerRepository.findById(id).get().getInvoices().get(0).getDueDay())){
-
-            goerRepository.findById(id).get().getInvoices().get(0).setStatusPayment(StatusPayment.WAITING_PAYMENT);
-
-        }
+        currentInvoiceStatus(id);
 
         return goerRepository.findById(id).get();
     }
+
+    private void currentInvoiceStatus(Long id) {
+
+        int lastInvoice = goerRepository.findById(id).get().getInvoices().size()-1;
+
+        if (goerRepository.getReferenceById(id).getInvoices().get(lastInvoice).getStatusPayment().equals(StatusPayment.IN_PROGRESS)){
+
+            if (LocalDate.now().getDayOfMonth() > goerRepository.getReferenceById(id).getInvoices().get(lastInvoice).getDueDay().minusDays(7).getDayOfMonth()
+                    && LocalDate.now().getDayOfMonth() < goerRepository.getReferenceById(id).getInvoices().get(lastInvoice).getDueDay().getDayOfMonth()){
+
+                goerRepository.getReferenceById(id).getInvoices().get(lastInvoice).setStatusPayment(StatusPayment.WAITING_PAYMENT);
+
+                invoiceRepository.save(goerRepository.getReferenceById(id).getInvoices().get(lastInvoice));
+
+            }
+
+
+
+
+        }
+        else if (goerRepository.getReferenceById(id).getInvoices().get(lastInvoice).getStatusPayment().equals(StatusPayment.WAITING_PAYMENT)){
+
+        }
+        else if (goerRepository.getReferenceById(id).getInvoices().get(lastInvoice).getStatusPayment().equals(StatusPayment.PAID)){
+
+        }
+
+
+
+    }
+
 
     // em breve finalizado
     public Goer findByCpf(String cpf){

@@ -6,14 +6,12 @@ import com.Project.Register_Gym_Goers.entities.enums.PlanCategory;
 import com.Project.Register_Gym_Goers.entities.enums.StatusPayment;
 import com.Project.Register_Gym_Goers.repositories.GoerRepository;
 import com.Project.Register_Gym_Goers.repositories.InvoiceRepository;
-import com.Project.Register_Gym_Goers.services.FaturaSchedulerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 
-import java.time.Instant;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+
 
 @Configuration
 public class testConfig implements CommandLineRunner {
@@ -22,19 +20,21 @@ public class testConfig implements CommandLineRunner {
     private GoerRepository goerRepository;
     @Autowired
     private InvoiceRepository invoiceRepository;
-    @Autowired
-    private FaturaSchedulerService faturaSchedulerService;
-
-
 
 
     @Override
     public void run(String... args) throws Exception {
 
+        Goer goer = new Goer(null, "kauan", LocalDate.parse("2004-12-12"), "4541515","12212221","rua generica", LocalDate.now());
 
+        goerRepository.save(goer);
 
+        Invoice invoice1 = new Invoice(null, StatusPayment.PAID, PlanCategory.MONTHLY, LocalDate.now().plusMonths(1), LocalDate.now());
 
+        invoice1.setGoer(goer);
+        goer.getInvoices().add(invoice1);
 
+        invoiceRepository.save(invoice1);
 
     }
 }
