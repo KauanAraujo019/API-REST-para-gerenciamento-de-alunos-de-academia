@@ -28,8 +28,8 @@ public class Invoice implements Serializable {
     @JsonIgnore
     @ManyToOne
     @JoinTable(name = "tb_Orders_Goers",
-            joinColumns = @JoinColumn(name = "tb_goer"),
-            inverseJoinColumns = @JoinColumn(name = "tb_invoices"))
+            joinColumns = @JoinColumn(name = "tb_invoices"),
+            inverseJoinColumns = @JoinColumn(name = "tb_goers"))
     private Goer goer;
 
 

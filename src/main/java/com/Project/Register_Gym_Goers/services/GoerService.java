@@ -50,18 +50,31 @@ public class GoerService {
 
             }
 
-
-
-
         }
         else if (goerRepository.getReferenceById(id).getInvoices().get(lastInvoice).getStatusPayment().equals(StatusPayment.WAITING_PAYMENT)){
+
+            if (LocalDate.now().getDayOfMonth() > goerRepository.getReferenceById(id).getInvoices().get(lastInvoice).getDueDay().getDayOfMonth()){
+
+                goerRepository.getReferenceById(id).getInvoices().get(lastInvoice).setStatusPayment(StatusPayment.OVERDUE);
+
+                invoiceRepository.save(goerRepository.getReferenceById(id).getInvoices().get(lastInvoice));
+
+            }
+
 
         }
         else if (goerRepository.getReferenceById(id).getInvoices().get(lastInvoice).getStatusPayment().equals(StatusPayment.PAID)){
 
+            Invoice invoice = new Invoice(null, StatusPayment.IN_PROGRESS, PlanCategory.MONTHLY, LocalDate.now(), LocalDate.now().plusMonths(1));
+
+            goerRepository.getReferenceById(id).getInvoices().add(invoice);
+
+            invoice.setGoer(goerRepository.getReferenceById(id));
+
+            invoiceRepository.save(invoice);
+
+
         }
-
-
 
     }
 
