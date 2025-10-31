@@ -53,7 +53,10 @@ public class GoerService {
         }
         else if (goerRepository.getReferenceById(id).getInvoices().get(lastInvoice).getStatusPayment().equals(StatusPayment.WAITING_PAYMENT)){
 
-            if (LocalDate.now().getDayOfMonth() > goerRepository.getReferenceById(id).getInvoices().get(lastInvoice).getDueDay().getDayOfMonth()){
+            if (LocalDate.now().getDayOfYear() > goerRepository.getReferenceById(id).getInvoices().get(lastInvoice).getDueDay().getDayOfYear()){
+
+                int a = LocalDate.now().getDayOfYear();
+                int b = goerRepository.getReferenceById(id).getInvoices().get(lastInvoice).getDueDay().getDayOfYear();
 
                 goerRepository.getReferenceById(id).getInvoices().get(lastInvoice).setStatusPayment(StatusPayment.OVERDUE);
 
