@@ -7,8 +7,6 @@ import com.Project.Register_Gym_Goers.entities.enums.StatusPayment;
 import com.Project.Register_Gym_Goers.repositories.GoerRepository;
 import com.Project.Register_Gym_Goers.repositories.InvoiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -68,7 +66,7 @@ public class GoerService {
         }
         else if (goerRepository.getReferenceById(id).getInvoices().get(lastInvoice).getStatusPayment().equals(StatusPayment.PAID)){
 
-            Invoice invoice = new Invoice(null, StatusPayment.IN_PROGRESS, PlanCategory.MONTHLY, LocalDate.now(), LocalDate.now().plusMonths(1));
+            Invoice invoice = new Invoice(null, StatusPayment.IN_PROGRESS, goerRepository.getReferenceById(id).getPlanCategory(), LocalDate.now(), LocalDate.now().plusMonths(1));
 
             goerRepository.getReferenceById(id).getInvoices().add(invoice);
 
@@ -91,15 +89,17 @@ public class GoerService {
 
     public Goer insert(Goer goer){
 
+
+
         goerRepository.save(goer);
 
-        Invoice invoice = new Invoice(null, StatusPayment.PAID, PlanCategory.MONTHLY, LocalDate.now(), LocalDate.now().plusMonths(1));
+     //   Invoice invoice = new Invoice(null, StatusPayment.PAID, PlanCategory.MONTHLY, LocalDate.now(), LocalDate.now().plusMonths(1));
 
-        goer.getInvoices().add(invoice);
+    //    goer.getInvoices().add(invoice);
 
-        invoice.setGoer(goer);
+    //    invoice.setGoer(goer);
 
-        invoiceRepository.save(invoice);
+    //    invoiceRepository.save(invoice);
 
         return goer;
 

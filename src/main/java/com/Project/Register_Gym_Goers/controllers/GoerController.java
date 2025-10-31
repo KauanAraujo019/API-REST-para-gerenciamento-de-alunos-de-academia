@@ -1,6 +1,7 @@
 package com.Project.Register_Gym_Goers.controllers;
 
 import com.Project.Register_Gym_Goers.entities.Goer;
+import com.Project.Register_Gym_Goers.entities.Invoice;
 import com.Project.Register_Gym_Goers.services.GoerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -42,7 +43,7 @@ public class GoerController {
 
     }
 
-    @PostMapping
+    @PostMapping()
     public ResponseEntity<Goer> insert(@RequestBody Goer goer){
 
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(goer.getId()).toUri();

@@ -1,5 +1,6 @@
 package com.Project.Register_Gym_Goers.entities;
 
+import com.Project.Register_Gym_Goers.entities.enums.PlanCategory;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -22,6 +23,7 @@ public class Goer implements Serializable {
     private String cpf;
     private String phone;
     private String address;
+    private Integer planCategory;
 
     private LocalDate dateRegister = LocalDate.now();
 
@@ -34,7 +36,7 @@ public class Goer implements Serializable {
 
     }
 
-    public Goer(Long id, String name, LocalDate birthDate, String cpf, String phone, String address, LocalDate dateRegister) {
+    public Goer(Long id, String name, LocalDate birthDate, String cpf, String phone, String address, LocalDate dateRegister, PlanCategory planCategory) {
         this.id = id;
         this.name = name;
         this.birthDate = birthDate;
@@ -42,6 +44,7 @@ public class Goer implements Serializable {
         this.phone = phone;
         this.address = address;
         this.dateRegister = dateRegister;
+        setPlanCategory(planCategory);
 
         age = LocalDate.now().getYear() - birthDate.getYear();
 
@@ -112,7 +115,13 @@ public class Goer implements Serializable {
         this.invoices = invoices;
     }
 
+    public PlanCategory getPlanCategory() {
+        return PlanCategory.findById(planCategory);
+    }
 
+    public void setPlanCategory(PlanCategory planCategory) {
+        this.planCategory = planCategory.getCode();
+    }
 
     @Override
     public boolean equals(Object o) {

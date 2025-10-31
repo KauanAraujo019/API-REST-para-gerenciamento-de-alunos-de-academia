@@ -20,9 +20,7 @@ public class Invoice implements Serializable {
     private Long id;
 
     private Double price;
-
     private Integer statusPayment;
-    private Integer planCategory;
     private LocalDate referenceMonth;
     private LocalDate dueDay;
 
@@ -42,12 +40,8 @@ public class Invoice implements Serializable {
     public Invoice(Long id, StatusPayment statusPayment, PlanCategory planCategory, LocalDate referenceMonth, LocalDate dueDay) {
         this.id = id;
         setStatusPayment(statusPayment);
-        setPlanCategory(planCategory);
         this.referenceMonth = referenceMonth;
         this.dueDay = dueDay;
-
-
-        price =  PlanCategory.defPricePlan(planCategory);
 
     }
 
@@ -67,14 +61,6 @@ public class Invoice implements Serializable {
 
     public void setStatusPayment(StatusPayment statusPayment) {
         this.statusPayment = statusPayment.getCode();
-    }
-
-    public PlanCategory getPlanCategory() {
-        return PlanCategory.findById(planCategory);
-    }
-
-    public void setPlanCategory(PlanCategory planCategory) {
-        this.planCategory = planCategory.getCode();
     }
 
     public LocalDate getReferenceMonth() {
@@ -105,8 +91,9 @@ public class Invoice implements Serializable {
         return price;
     }
 
-    public void setPrice(Double price) {
-        this.price = price;
+    public void setPrice(){
+        this.price = PlanCategory.defPricePlan(goer.getPlanCategory());
+
     }
 
     @Override
