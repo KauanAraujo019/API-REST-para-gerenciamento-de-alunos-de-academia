@@ -33,6 +33,34 @@ public enum PlanCategory {
     }
 
 
+    public static Double defPricePlan(PlanCategory planCategory){
+
+        if (planCategory.code == 1){
+
+            return 120.00;
+
+        }
+        else if (planCategory.code == 2){
+
+            return 330.00;
+
+        }
+        else if (planCategory.code == 3){
+
+            return 600.00;
+
+        }
+        else if (planCategory.code == 4){
+
+            return 1100.00;
+
+        }
+
+        return null;
+
+    }
+
+
 
 
 }

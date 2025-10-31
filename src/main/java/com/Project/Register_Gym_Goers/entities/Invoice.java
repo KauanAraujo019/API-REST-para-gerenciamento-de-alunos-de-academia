@@ -19,6 +19,8 @@ public class Invoice implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private Double price;
+
     private Integer statusPayment;
     private Integer planCategory;
     private LocalDate referenceMonth;
@@ -43,6 +45,9 @@ public class Invoice implements Serializable {
         setPlanCategory(planCategory);
         this.referenceMonth = referenceMonth;
         this.dueDay = dueDay;
+
+
+        price =  PlanCategory.defPricePlan(planCategory);
 
     }
 
@@ -96,7 +101,13 @@ public class Invoice implements Serializable {
         this.goer = goer;
     }
 
+    public Double getPrice() {
+        return price;
+    }
 
+    public void setPrice(Double price) {
+        this.price = price;
+    }
 
     @Override
     public boolean equals(Object o) {
