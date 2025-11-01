@@ -9,6 +9,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.Objects;
 
 @Entity
@@ -21,7 +22,7 @@ public class Invoice implements Serializable {
 
     private Double price;
     private Integer statusPayment;
-    private LocalDate referenceMonth;
+    private Month referenceMonth = LocalDate.now().getMonth();
     private LocalDate dueDay;
 
 
@@ -37,11 +38,10 @@ public class Invoice implements Serializable {
 
     }
 
-    public Invoice(Long id, StatusPayment statusPayment, PlanCategory planCategory, LocalDate referenceMonth, LocalDate dueDay) {
+    public Invoice(Long id, StatusPayment statusPayment, PlanCategory planCategory, Month referenceMonth) {
         this.id = id;
         setStatusPayment(statusPayment);
         this.referenceMonth = referenceMonth;
-        this.dueDay = dueDay;
 
     }
 
@@ -63,11 +63,11 @@ public class Invoice implements Serializable {
         this.statusPayment = statusPayment.getCode();
     }
 
-    public LocalDate getReferenceMonth() {
+    public Month getReferenceMonth() {
         return referenceMonth;
     }
 
-    public void setReferenceMonth(LocalDate referenceMonth) {
+    public void setReferenceMonth(Month referenceMonth) {
         this.referenceMonth = referenceMonth;
     }
 
@@ -75,8 +75,9 @@ public class Invoice implements Serializable {
         return dueDay;
     }
 
-    public void setDueDay(LocalDate dueDay) {
-        this.dueDay = dueDay;
+    public void setDueDay() {
+
+        this.dueDay = LocalDate.now().plusMonths(PlanCategory.defDueDay(goer.getPlanCategory()));
     }
 
     public Goer getGoer() {

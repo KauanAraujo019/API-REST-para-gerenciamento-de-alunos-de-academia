@@ -1,5 +1,6 @@
 package com.Project.Register_Gym_Goers.entities.enums;
 
+import java.time.LocalDate;
 import java.util.Objects;
 
 public enum PlanCategory {
@@ -57,6 +58,31 @@ public enum PlanCategory {
         }
 
         return null;
+
+    }
+
+    public static int defDueDay(PlanCategory planCategory){
+
+        if (planCategory.code == 2){
+
+            return 3;
+
+        }
+        else if (planCategory.code == 3){
+
+            return 6;
+
+        }
+        else if (planCategory.code == 4){
+
+            return 12;
+
+        }
+        else {
+            return 0;
+        }
+
+
 
     }
 

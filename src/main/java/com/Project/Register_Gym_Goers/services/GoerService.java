@@ -37,6 +37,9 @@ public class GoerService {
 
         int lastInvoice = goerRepository.findById(id).get().getInvoices().size()-1;
 
+        if (goerRepository.getReferenceById(id).getInvoices().get(lastInvoice).g)
+
+
         if (goerRepository.getReferenceById(id).getInvoices().get(lastInvoice).getStatusPayment().equals(StatusPayment.IN_PROGRESS)){
 
             if (LocalDate.now().getDayOfMonth() > goerRepository.getReferenceById(id).getInvoices().get(lastInvoice).getDueDay().minusDays(7).getDayOfMonth()
@@ -66,7 +69,7 @@ public class GoerService {
         }
         else if (goerRepository.getReferenceById(id).getInvoices().get(lastInvoice).getStatusPayment().equals(StatusPayment.PAID)){
 
-            Invoice invoice = new Invoice(null, StatusPayment.IN_PROGRESS, goerRepository.getReferenceById(id).getPlanCategory(), LocalDate.now(), LocalDate.now().plusMonths(1));
+            Invoice invoice = new Invoice(null, StatusPayment.IN_PROGRESS, goerRepository.getReferenceById(id).getPlanCategory(), goerRepository.getReferenceById(id).getInvoices().get(lastInvoice).getReferenceMonth().plus(1));
 
             goerRepository.getReferenceById(id).getInvoices().add(invoice);
 
@@ -89,17 +92,16 @@ public class GoerService {
 
     public Goer insert(Goer goer){
 
-
-
+        goer.setAge();
         goerRepository.save(goer);
 
-     //   Invoice invoice = new Invoice(null, StatusPayment.PAID, PlanCategory.MONTHLY, LocalDate.now(), LocalDate.now().plusMonths(1));
+        goer.getInvoices().get(0).setGoer(goer);
+        goer.getInvoices().get(0).setPrice();
+        goer.getInvoices().get(0).setDueDay();
 
-    //    goer.getInvoices().add(invoice);
+        invoiceRepository.save(goer.getInvoices().get(0));
 
-    //    invoice.setGoer(goer);
 
-    //    invoiceRepository.save(invoice);
 
         return goer;
 

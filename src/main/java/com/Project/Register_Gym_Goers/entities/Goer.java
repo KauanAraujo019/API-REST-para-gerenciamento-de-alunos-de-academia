@@ -46,8 +46,6 @@ public class Goer implements Serializable {
         this.dateRegister = dateRegister;
         setPlanCategory(planCategory);
 
-        age = LocalDate.now().getYear() - birthDate.getYear();
-
     }
 
 
@@ -123,6 +121,14 @@ public class Goer implements Serializable {
         this.planCategory = planCategory.getCode();
     }
 
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge() {
+        this.age = LocalDate.now().getYear() - birthDate.getYear();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
@@ -135,11 +141,5 @@ public class Goer implements Serializable {
         return Objects.hashCode(id);
     }
 
-    public Integer getAge() {
-        return age;
-    }
 
-    public void setAge(Integer age) {
-        this.age = age;
-    }
 }
