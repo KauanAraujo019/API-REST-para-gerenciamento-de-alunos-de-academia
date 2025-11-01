@@ -38,11 +38,13 @@ public class GoerService {
 
         int lastInvoice = goerRepository.findById(id).get().getInvoices().size()-1;
 
+        if (LocalDate.now().getMonthValue() < goerRepository.getReferenceById(id).getInvoices().get(lastInvoice).getDueDay().minusDays(1).getMonthValue() && LocalDate.now().getYear() == goerRepository.getReferenceById(id).getInvoices().get(lastInvoice).getDueDay().getYear()
+            || LocalDate.now().getMonthValue() > goerRepository.getReferenceById(id).getInvoices().get(lastInvoice).getDueDay().getDayOfMonth()-1 && LocalDate.now().getYear() < goerRepository.getReferenceById(id).getInvoices().get(lastInvoice).getDueDay().getYear()) {
 
-        if (LocalDate.now().getMonthValue() < goerRepository.getReferenceById(id).getInvoices().get(lastInvoice).getDueDay().getMonthValue()-1 && LocalDate.now().getYear() == goerRepository.getReferenceById(id).getInvoices().get(lastInvoice).getDueDay().getYear()
-                || LocalDate.now().getMonthValue() > goerRepository.getReferenceById(id).getInvoices().get(lastInvoice).getDueDay().getMonthValue() && LocalDate.now().getYear() < goerRepository.getReferenceById(id).getInvoices().get(lastInvoice).getDueDay().getYear()){
             return;
+
         }
+
 
 
         if (goerRepository.getReferenceById(id).getInvoices().get(lastInvoice).getStatusPayment().equals(StatusPayment.IN_PROGRESS)){
@@ -71,11 +73,15 @@ public class GoerService {
         }
         else if (goerRepository.getReferenceById(id).getInvoices().get(lastInvoice).getStatusPayment().equals(StatusPayment.PAID)){
 
-            Invoice invoice = new Invoice(null, StatusPayment.IN_PROGRESS, goerRepository.getReferenceById(id).getPlanCategory(), goerRepository.getReferenceById(id).getInvoices().get(lastInvoice).getReferenceMonth().plus(PlanCategory.defDueDay(goerRepository.getReferenceById(id).getPlanCategory())));
+            Invoice invoice = new Invoice(null, StatusPayment.IN_PROGRESS,
+                    goerRepository.getReferenceById(id).getInvoices().get(lastInvoice).getReferenceMonth().plus(PlanCategory.defDueDay(goerRepository.getReferenceById(id).getPlanCategory())));
+            invoice.setGoer(goerRepository.getReferenceById(id));
+
+            invoice.setPrice();
+            invoice.finallySetDueDay(goerRepository.getReferenceById(id).getPlanCategory());
+
 
             goerRepository.getReferenceById(id).getInvoices().add(invoice);
-
-            invoice.setGoer(goerRepository.getReferenceById(id));
 
             invoiceRepository.save(invoice);
 

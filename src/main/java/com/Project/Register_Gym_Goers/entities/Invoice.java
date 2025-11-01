@@ -38,10 +38,16 @@ public class Invoice implements Serializable {
 
     }
 
-    public Invoice(Long id, StatusPayment statusPayment, PlanCategory planCategory, Month referenceMonth) {
+    public Invoice(Long id, StatusPayment statusPayment, Month referenceMonth) {
         this.id = id;
         setStatusPayment(statusPayment);
         this.referenceMonth = referenceMonth;
+
+    }
+
+    public void finallySetDueDay(PlanCategory planCategory){
+
+        dueDay = goer.getInvoices().get(goer.getInvoices().size()-1).getDueDay().plusMonths(6);
 
     }
 
@@ -77,7 +83,7 @@ public class Invoice implements Serializable {
 
     public void setDueDay() {
 
-        this.dueDay = LocalDate.now().plusMonths(PlanCategory.defDueDay(goer.getPlanCategory()));
+        this.dueDay = goer.getDateRegister();
     }
 
     public Goer getGoer() {
