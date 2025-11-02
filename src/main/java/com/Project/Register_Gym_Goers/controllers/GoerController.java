@@ -1,8 +1,8 @@
 package com.Project.Register_Gym_Goers.controllers;
 
 import com.Project.Register_Gym_Goers.entities.Goer;
-import com.Project.Register_Gym_Goers.entities.Invoice;
 import com.Project.Register_Gym_Goers.services.GoerService;
+import com.Project.Register_Gym_Goers.services.InvoiceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +18,8 @@ public class GoerController {
 
     @Autowired
     private GoerService goerService;
-
+    @Autowired
+    private InvoiceService invoiceService;
 
     @GetMapping
     public ResponseEntity<List<Goer>> findAll(){
@@ -52,14 +53,16 @@ public class GoerController {
 
     }
 
-    /*
-    @PutMapping(value = "/{id}")
-    public ResponseEntity<Goer> update(@PathVariable Long id, @RequestBody Goer goer){
 
-        goerService
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<Void> update(@PathVariable Long id){
+
+        invoiceService.update(id);
+
+        return ResponseEntity.noContent().build();
 
     }
 
 
-     */
+
 }
