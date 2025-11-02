@@ -63,7 +63,11 @@ public enum PlanCategory {
 
     public static int defDueDay(PlanCategory planCategory){
 
-        if (planCategory.code == 2){
+        if (planCategory.code == 1){
+
+            return 1;
+        }
+        else if(planCategory.code == 2){
 
             return 3;
 

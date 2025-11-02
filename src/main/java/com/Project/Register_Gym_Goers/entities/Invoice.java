@@ -47,7 +47,7 @@ public class Invoice implements Serializable {
 
     public void finallySetDueDay(PlanCategory planCategory){
 
-        dueDay = goer.getInvoices().get(goer.getInvoices().size()-1).getDueDay().plusMonths(6);
+        dueDay = goer.getInvoices().get(goer.getInvoices().size()-1).getDueDay().plusMonths(PlanCategory.defDueDay(goer.getPlanCategory()));
 
     }
 
