@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academia Dev FIT</title>
+
+    <style>
+        body {
+          margin: 0;
+          font-family: Arial, sans-serif;
+          background-color: #d60000;
+          color: #fff;
+        }
+
+        .container {
+          display: flex;
+        }
+
+        .sidebar {
+          width: 230px;
+          background: #a80000;
+          min-height: 100vh;
+          padding: 20px;
+          box-shadow: 2px 0 10px rgba(0,0,0,0.2);
+        }
+
+        .sidebar h2 {
+          font-size: 20px;
+          margin-bottom: 20px;
+          text-align: center;
+        }
+
+        .sidebar button {
+          display: block;
+          width: 100%;
+          margin: 8px 0;
+          padding: 10px;
+          background: #ff4d4d;
+          border: none;
+          border-radius: 6px;
+          color: white;
+          font-weight: bold;
+          cursor: pointer;
+          transition: 0.3s;
+        }
+
+        .sidebar button:hover {
+          background: #ff6666;
+        }
+
+        .main-content {
+          flex: 1;
+          padding: 30px;
+          background: #d60000;
+        }
+
+        .header {
+          font-size: 28px;
+          font-weight: bold;
+          font-style: italic;
+          margin-bottom: 25px;
+          color: white;
+          border-bottom: 2px solid white;
+          padding-bottom: 10px;
+        }
+
+        .alunos-table {
+          width: 90%;
+          margin-top: 20px;
+          border-collapse: collapse;
+          background-color: #fff;
+          border-radius: 10px;
+          overflow: hidden;
+          color: #000;
+        }
+
+        .alunos-table th {
+          background-color: #ff4d4d;
+          padding: 10px;
+          text-align: left;
+          color: #fff;
+        }
+
+        .alunos-table td {
+          padding: 10px;
+          border-top: 1px solid #ddd;
+        }
+
+        .alunos-table tr:hover {
+          background-color: #ffe6e6;
+        }
+
+        .loading {
+          text-align: center;
+          padding: 15px;
+          font-style: italic;
+        }
+
+        /* --- Consulta de Fatura aprimorada --- */
+        .consulta-container {
+          background: #fff;
+          color: #000;
+          padding: 25px;
+          border-radius: 15px;
+          width: 90%;
+          box-shadow: 0 0 15px rgba(0,0,0,0.3);
+        }
+
+        .consulta-container h1,
+        .consulta-container h2,
+        .consulta-container h3 {
+          color: #a80000;
+          margin-top: 10px;
+        }
+
+        .consulta-container label {
+          font-weight: bold;
+          color: #a80000;
+        }
+
+        .consulta-container input {
+          padding: 8px;
+          width: 260px;
+          border-radius: 6px;
+          border: 1px solid #aaa;
+          outline: none;
+          margin: 8px 0 20px 10px;
+        }
+
+        #detalhesAluno {
+          margin-top: 25px;
+          background: #fafafa;
+          border: 2px solid #ff4d4d;
+          border-radius: 12px;
+          padding: 20px;
+          box-shadow: 0 0 8px rgba(0,0,0,0.2);
+        }
+
+        #btnAtualizar {
+          background: #ff4d4d;
+          border: none;
+          padding: 10px 15px;
+          color: white;
+          border-radius: 8px;
+          cursor: pointer;
+          font-weight: bold;
+          margin-top: 10px;
+          transition: 0.3s;
+        }
+
+        #btnAtualizar:hover {
+          background: #ff6b6b;
+        }
+
+        #respostaAtualizacao {
+          margin-top: 10px;
+          font-weight: bold;
+        }
+    </style>
+
+</head>
+
+<body>
+<div class="container">
+    <div class="sidebar">
+        <h2>Menu Principal</h2>
+        <button onclick="carregarPagina('cadastro')">Cadastro de alunos</button>
+        <button onclick="carregarPagina('consulta')">Consulta de fatura</button>
+        <button onclick="carregarPagina('listar')">Listar alunos</button>
+    </div>
+
+    <div class="main-content" id="conteudo-principal">
+        <div class="header">Academia Dev FIT</div>
+        <h1>Alunos Cadastrados</h1>
+        <table id="tabelaAlunos" class="alunos-table">
+            <thead>
+            <tr><th>ID</th><th>Nome</th><th>Idade</th><th>Plano</th></tr>
+            </thead>
+            <tbody><tr><td colspan="4" class="loading">Carregando alunos...</td></tr></tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    // Cálculo de idade
+    function calcularIdade(dataNascimento) {
+      const hoje = new Date();
+      const nasc = new Date(dataNascimento);
+      let idade = hoje.getFullYear() - nasc.getFullYear();
+      const mes = hoje.getMonth() - nasc.getMonth();
+      if (mes < 0 || (mes === 0 && hoje.getDate() < nasc.getDate())) idade--;
+      return idade;
+    }
+
+    async function carregarAlunos() {
+      const tabela = document.querySelector("#tabelaAlunos tbody");
+      try {
+        const resposta = await fetch("http://localhost:8080/goers");
+        const alunos = await resposta.json();
+        tabela.innerHTML = "";
+        if (!alunos.length) {
+          tabela.innerHTML = `<tr><td colspan="4" class="loading">Nenhum aluno encontrado.</td></tr>`;
+          return;
+        }
+        alunos.forEach(a => {
+          const idade = a.birthDate ? calcularIdade(a.birthDate) : "-";
+          const linha = document.createElement("tr");
+          linha.innerHTML = `<td>${a.id}</td><td>${a.name}</td><td>${idade}</td><td>${a.planCategory}</td>`;
+          tabela.appendChild(linha);
+        });
+      } catch {
+        tabela.innerHTML = `<tr><td colspan="4" class="loading">Erro ao carregar alunos.</td></tr>`;
+      }
+    }
+
+    async function carregarPagina(pagina) {
+      const conteudo = document.getElementById('conteudo-principal');
+
+      if (pagina === 'consulta') {
+        conteudo.innerHTML = `
+          <div class="header">Academia Dev FIT</div>
+          <div class="consulta-container">
+            <h1>Consulta de Fatura</h1>
+            <label>Pesquisar aluno:</label>
+            <input type="text" id="buscarAluno" placeholder="Digite o nome ou CPF..."/>
+
+            <table id="tabelaBusca" class="alunos-table">
+              <thead><tr><th>ID</th><th>Nome</th><th>Plano</th></tr></thead>
+              <tbody><tr><td colspan="3" class="loading">Digite para buscar...</td></tr></tbody>
+            </table>
+
+            <div id="detalhesAluno" style="display:none;">
+              <h2>Detalhes do Aluno</h2>
+              <p><b>Nome:</b> <span id="detNome"></span></p>
+              <p><b>Idade:</b> <span id="detIdade"></span></p>
+              <p><b>CPF:</b> <span id="detCPF"></span></p>
+              <p><b>Telefone:</b> <span id="detTelefone"></span></p>
+              <p><b>Endereço:</b> <span id="detEndereco"></span></p>
+              <p><b>Plano:</b> <span id="detPlano"></span></p>
+              <p><b>Última Fatura:</b> <span id="detUltimaFatura"></span></p>
+
+              <h3>Histórico de Faturas</h3>
+              <ul id="listaFaturas"></ul>
+
+              <button id="btnAtualizar">Atualizar última fatura (PUT)</button>
+              <p id="respostaAtualizacao"></p>
+            </div>
+          </div>
+        `;
+
+        const inputBusca = document.getElementById('buscarAluno');
+        const tabela = document.querySelector('#tabelaBusca tbody');
+        const detalhesDiv = document.getElementById('detalhesAluno');
+        let alunosCache = [];
+
+        inputBusca.addEventListener('input', async function() {
+          const termo = inputBusca.value.toLowerCase().trim();
+          if (termo.length < 2) {
+            tabela.innerHTML = `<tr><td colspan="3" class="loading">Digite para buscar...</td></tr>`;
+            return;
+          }
+          try {
+            const resp = await fetch('http://localhost:8080/goers');
+            const alunos = await resp.json();
+            alunosCache = alunos;
+            const filtrados = alunos.filter(a =>
+              a.name.toLowerCase().includes(termo) ||
+              (a.cpf && a.cpf.includes(termo)) ||
+              String(a.id).includes(termo)
+            );
+            if (!filtrados.length) {
+              tabela.innerHTML = `<tr><td colspan="3" class="loading">Nenhum aluno encontrado.</td></tr>`;
+              return;
+            }
+            tabela.innerHTML = "";
+            filtrados.forEach(a => {
+              const linha = document.createElement('tr');
+              linha.innerHTML = `<td>${a.id}</td><td>${a.name}</td><td>${a.planCategory}</td>`;
+              linha.style.cursor = "pointer";
+              linha.onclick = () => mostrarDetalhes(a);
+              tabela.appendChild(linha);
+            });
+          } catch {
+            tabela.innerHTML = `<tr><td colspan="3" class="loading">Erro ao buscar alunos.</td></tr>`;
+          }
+        });
+
+        function mostrarDetalhes(aluno) {
+          detalhesDiv.style.display = "block";
+          document.getElementById('detNome').textContent = aluno.name;
+          document.getElementById('detCPF').textContent = aluno.cpf || "-";
+          document.getElementById('detTelefone').textContent = aluno.phone || "-";
+          document.getElementById('detEndereco').textContent = aluno.address || "-";
+          document.getElementById('detPlano').textContent = aluno.planCategory;
+          document.getElementById('detIdade').textContent = aluno.birthDate ? calcularIdade(aluno.birthDate) + " anos" : "-";
+
+          const listaFaturas = document.getElementById('listaFaturas');
+          listaFaturas.innerHTML = "";
+          if (aluno.invoices?.length) {
+            aluno.invoices.forEach((f, i) => {
+              const li = document.createElement('li');
+              li.textContent = `#${i + 1} - Status: ${f.statusPayment}`;
+              listaFaturas.appendChild(li);
+            });
+            const ultima = aluno.invoices[aluno.invoices.length - 1];
+            document.getElementById('detUltimaFatura').textContent = ultima.statusPayment;
+          } else {
+            document.getElementById('detUltimaFatura').textContent = "Nenhuma fatura registrada";
+          }
+
+          const btnAtualizar = document.getElementById('btnAtualizar');
+          const respText = document.getElementById('respostaAtualizacao');
+          btnAtualizar.onclick = async () => {
+            btnAtualizar.disabled = true;
+            respText.textContent = "Atualizando...";
+            try {
+              const r = await fetch(`http://localhost:8080/goers/${aluno.id}/invoice`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ statusPayment: "PAID" })
+              });
+              if (!r.ok) throw new Error("Erro na atualização");
+              respText.style.color = "green";
+              respText.textContent = "Fatura atualizada com sucesso!";
+            } catch (err) {
+              respText.style.color = "red";
+              respText.textContent = "Erro: " + err.message;
+            } finally {
+              btnAtualizar.disabled = false;
+            }
+          };
+        }
+      }
+
+      if (pagina === 'listar') {
+        conteudo.innerHTML = `
+          <div class="header">Academia Dev FIT</div>
+          <h1>Alunos Cadastrados</h1>
+          <table id="tabelaAlunos" class="alunos-table">
+            <thead><tr><th>ID</th><th>Nome</th><th>Idade</th><th>Plano</th></tr></thead>
+            <tbody><tr><td colspan="4" class="loading">Carregando alunos...</td></tr></tbody>
+          </table>
+        `;
+        carregarAlunos();
+      }
+
+      if (pagina === 'cadastro') {
+  conteudo.innerHTML = `
+    <div style="background-color:#b71c1c; color:white; padding:15px; font-size:24px; font-weight:bold; text-align:center; border-radius:8px 8px 0 0;">
+      Academia Dev FIT
+    </div>
+
+    <div style="max-width:600px; margin:30px auto; background:white; border-radius:10px; box-shadow:0 4px 12px rgba(0,0,0,0.15); padding:30px;">
+      <h2 style="text-align:center; color:#b71c1c; margin-bottom:25px;">Cadastro de Alunos</h2>
+
+      <form id="goerForm" style="display:flex; flex-direction:column; gap:18px;">
+
+        <div>
+          <label for="name" style="color:#b71c1c; font-weight:bold; display:block; margin-bottom:6px;">Nome</label>
+          <input type="text" id="name" required style="width:100%; padding:10px; border-radius:6px; border:1px solid #ccc;">
+        </div>
+
+        <div>
+          <label for="birthDate" style="color:#b71c1c; font-weight:bold; display:block; margin-bottom:6px;">Data de Nascimento</label>
+          <input type="date" id="birthDate" required style="width:100%; padding:10px; border-radius:6px; border:1px solid #ccc;">
+        </div>
+
+        <div>
+          <label for="cpf" style="color:#b71c1c; font-weight:bold; display:block; margin-bottom:6px;">CPF</label>
+          <input type="text" id="cpf" required style="width:100%; padding:10px; border-radius:6px; border:1px solid #ccc;">
+        </div>
+
+        <div>
+          <label for="phone" style="color:#b71c1c; font-weight:bold; display:block; margin-bottom:6px;">Telefone</label>
+          <input type="text" id="phone" required style="width:100%; padding:10px; border-radius:6px; border:1px solid #ccc;">
+        </div>
+
+        <div>
+          <label for="address" style="color:#b71c1c; font-weight:bold; display:block; margin-bottom:6px;">Endereço</label>
+          <input type="text" id="address" required style="width:100%; padding:10px; border-radius:6px; border:1px solid #ccc;">
+        </div>
+
+        <div>
+          <label for="planCategory" style="color:#b71c1c; font-weight:bold; display:block; margin-bottom:6px;">Plano</label>
+          <select id="planCategory" style="width:100%; padding:10px; border-radius:6px; border:1px solid #ccc;">
+            <option value="MONTHLY">Mensal</option>
+            <option value="QUARTERLY">Trimestral</option>
+            <option value="SEMESTER">Semestral</option>
+            <option value="ANNUAL">Anual</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="statusPayment" style="color:#b71c1c; font-weight:bold; display:block; margin-bottom:6px;">Status da Fatura</label>
+          <select id="statusPayment" style="width:100%; padding:10px; border-radius:6px; border:1px solid #ccc;">
+            <option value="PAID">Pago</option>
+          </select>
+        </div>
+
+        <button type="submit" style="margin-top:15px; background-color:#b71c1c; color:white; font-weight:bold; border:none; padding:12px; border-radius:6px; cursor:pointer; transition:0.3s;">
+          Enviar
+        </button>
+      </form>
+
+      <p id="response" style="text-align:center; font-weight:bold; margin-top:20px;"></p>
+    </div>
+  `;
+
+  const form = document.getElementById('goerForm');
+  const responseEl = document.getElementById('response');
+
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    const data = {
+      name: document.getElementById('name').value,
+      birthDate: document.getElementById('birthDate').value,
+      cpf: document.getElementById('cpf').value,
+      phone: document.getElementById('phone').value,
+      address: document.getElementById('address').value,
+      planCategory: document.getElementById('planCategory').value,
+      invoices: [{ statusPayment: document.getElementById('statusPayment').value }]
+    };
+    try {
+      const res = await fetch('http://localhost:8080/goers', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      const json = await res.json();
+      responseEl.textContent = res.ok
+        ? '✅ Enviado com sucesso! ID: ' + (json.id || 'não retornado')
+        : '❌ Erro no envio';
+      responseEl.style.color = res.ok ? 'green' : 'red';
+    } catch (err) {
+      responseEl.textContent = 'Erro: ' + err.message;
+      responseEl.style.color = 'red';
+    }
+  });
+}
+
+    }
+
+    window.onload = carregarAlunos;
+</script>
+</body>
+</html>

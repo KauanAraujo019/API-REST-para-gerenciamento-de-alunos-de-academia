@@ -11,6 +11,7 @@ import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -23,7 +24,17 @@ public class GoerService {
 
     public List<Goer> findAll(){
 
-        return goerRepository.findAll();
+        List<Goer> list = new ArrayList<>();
+
+        for (Goer goer : goerRepository.findAll()){
+
+            currentInvoiceStatus(goer.getId());
+
+            list.add(goer);
+
+        }
+
+        return list;
     }
 
 
@@ -65,13 +76,12 @@ public class GoerService {
         }
         else if (goerRepository.getReferenceById(id).getInvoices().get(lastInvoice).getStatusPayment().equals(StatusPayment.PAID)){
 
-            Invoice invoice = new Invoice(null, StatusPayment.IN_PROGRESS,
-                    goerRepository.getReferenceById(id).getInvoices().get(lastInvoice).getReferenceMonth().plus(PlanCategory.defDueDay(goerRepository.getReferenceById(id).getPlanCategory())));
+            Invoice invoice = new Invoice(null, StatusPayment.IN_PROGRESS);
             invoice.setGoer(goerRepository.getReferenceById(id));
 
             invoice.setPrice();
             invoice.finallySetDueDay(goerRepository.getReferenceById(id).getPlanCategory());
-
+            invoice.setReferenceMonth(invoice.getDueDay().getMonth());
 
             goerRepository.getReferenceById(id).getInvoices().add(invoice);
 

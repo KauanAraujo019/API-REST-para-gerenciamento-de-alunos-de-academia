@@ -12,6 +12,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:5500")
 @RestController
 @RequestMapping(value = "/goers")
 public class GoerController {
@@ -54,7 +55,7 @@ public class GoerController {
     }
 
 
-    @PutMapping(value = "/{id}")
+    @PutMapping(value = "/{id}/invoice")
     public ResponseEntity<Void> update(@PathVariable Long id){
 
         invoiceService.update(id);

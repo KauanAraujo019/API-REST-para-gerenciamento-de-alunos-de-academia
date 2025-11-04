@@ -22,6 +22,8 @@ public class Invoice implements Serializable {
 
     private Double price;
     private Integer statusPayment;
+
+    @Enumerated(EnumType.STRING)
     private Month referenceMonth = LocalDate.now().getMonth();
     private LocalDate dueDay;
 
@@ -38,10 +40,9 @@ public class Invoice implements Serializable {
 
     }
 
-    public Invoice(Long id, StatusPayment statusPayment, Month referenceMonth) {
+    public Invoice(Long id, StatusPayment statusPayment) {
         this.id = id;
         setStatusPayment(statusPayment);
-        this.referenceMonth = referenceMonth;
 
     }
 
