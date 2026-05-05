@@ -38,19 +38,11 @@ public class GoerService {
 
         int lastInvoice = goerRepository.findById(id).get().getInvoices().size()-1;
 
-        if (LocalDate.now().getMonthValue() < goerRepository.getReferenceById(id).getInvoices().get(lastInvoice).getDueDay().minusDays(1).getMonthValue() && LocalDate.now().getYear() == goerRepository.getReferenceById(id).getInvoices().get(lastInvoice).getDueDay().getYear()
-            || LocalDate.now().getMonthValue() > goerRepository.getReferenceById(id).getInvoices().get(lastInvoice).getDueDay().getDayOfMonth()-1 && LocalDate.now().getYear() < goerRepository.getReferenceById(id).getInvoices().get(lastInvoice).getDueDay().getYear()) {
-
-            return;
-
-        }
-
-
 
         if (goerRepository.getReferenceById(id).getInvoices().get(lastInvoice).getStatusPayment().equals(StatusPayment.IN_PROGRESS)){
 
-            if (LocalDate.now().getDayOfMonth() > goerRepository.getReferenceById(id).getInvoices().get(lastInvoice).getDueDay().minusDays(7).getDayOfMonth()
-                    && LocalDate.now().getDayOfMonth() < goerRepository.getReferenceById(id).getInvoices().get(lastInvoice).getDueDay().getDayOfMonth()){
+            if (LocalDate.now().getDayOfYear() > goerRepository.getReferenceById(id).getInvoices().get(lastInvoice).getDueDay().minusDays(7).getDayOfYear()
+                    && LocalDate.now().getDayOfYear() < goerRepository.getReferenceById(id).getInvoices().get(lastInvoice).getDueDay().getDayOfYear()){
 
                 goerRepository.getReferenceById(id).getInvoices().get(lastInvoice).setStatusPayment(StatusPayment.WAITING_PAYMENT);
 
